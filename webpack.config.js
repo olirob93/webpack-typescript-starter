@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack')
 const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin")
+const CopyPlugin = require('copy-webpack-plugin')
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isDev = nodeEnv === 'development';
@@ -82,6 +83,12 @@ let webpackConfig = {
       minChunkSize: 100000,
     }),
     new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        {from: path.resolve('./public/manifest.json'), to: 'manifest.json'},
+        {from: path.resolve('./public/robots.txt'), to: 'robots.txt'}
+      ]
+    })
   ],
   devServer: {
     historyApiFallback: true,
