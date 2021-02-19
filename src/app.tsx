@@ -1,14 +1,11 @@
-import React, {FC} from 'react';
+import React, { FC } from 'react';
 import TypeScriptTest from './components/TyprescriptTest';
 
-
-const App : FC = () => {
-    return (
+const App : FC = () => (
         <div>
             <h1>This is now working</h1>
             <TypeScriptTest/>
         </div>
-    )
-}
+);
 
-export default App
+export default App;

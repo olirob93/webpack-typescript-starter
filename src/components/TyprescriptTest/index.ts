@@ -1,3 +1,3 @@
-import TyprescriptTest from "./TyprescriptTest";
+import TyprescriptTest from './TyprescriptTest';
 
 export default TyprescriptTest;
