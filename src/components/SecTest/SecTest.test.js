@@ -1,9 +1,9 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import Test from "./Test";
+import SecTest from "./SecTest";
 
-describe("Test tests", () => {
+describe("SecTest tests", () => {
   it("should render", () => {
-    expect(render(<Test />)).toBeTruthy();
+    expect(render(<SecTest />)).toBeTruthy();
   });
 });
