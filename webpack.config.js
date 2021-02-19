@@ -3,12 +3,17 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const webpack = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack')
+const FriendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin")
 
 const nodeEnv = process.env.NODE_ENV || 'development';
 const isDev = nodeEnv === 'development';
 
-module.exports = {
+let webpackConfig = {
   mode: process.env.NODE_ENV,
+  entry: {
+    main: path.resolve(__dirname, 'src/index.tsx')
+  },
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
@@ -18,6 +23,11 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
   },
+  optimization: {
+    splitChunks: {
+      chunks: isDev ? 'async' : 'all'
+    }
+  },  
   module: {
     rules: [
       {
@@ -73,9 +83,35 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
   ],
-
   devServer: {
     historyApiFallback: true,
     port: 3000,
-  },
+    hot: true,
+    hotOnly: true,
+    open: true,
+    quiet: true
+  }
 };
+
+if (isDev) {
+  webpackConfig.entry.main = ['react-hot-loader/patch', './src/index.tsx'];
+  webpackConfig.resolve = {
+    alias: { 'react-dom': '@hot-loader/react-dom' },
+    extensions: ['*', '.ts', '.tsx', '.js', '.jsx']
+  };
+  webpackConfig.plugins.push(new Dotenv());
+  webpackConfig.plugins.push(new FriendlyErrorsWebpackPlugin());
+
+  delete webpackConfig.optimization;
+} else {
+  webpackConfig.plugins.push(
+    new webpack.EnvironmentPlugin([
+      'NODE_ENV'
+    ])
+  )
+};
+
+module.exports = webpackConfig
+  
+
+
